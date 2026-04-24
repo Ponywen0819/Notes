@@ -17,6 +17,11 @@
   "repelStrength": 10,
   "linkStrength": 1,
   "linkDistance": 250,
+<<<<<<< HEAD
   "scale": 1.1303584772232491,
   "close": false
+=======
+  "scale": 1.3267514250836465,
+  "close": true
+>>>>>>> 567da71 (peko)
 }

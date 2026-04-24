@@ -1,0 +1,226 @@
+{
+  "main": {
+    "id": "c52a77eb4612ca49",
+    "type": "split",
+    "children": [
+      {
+        "id": "cc356f8f6041682f",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "4d737ebf749b8871",
+            "type": "leaf",
+            "state": {
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "關聯圖檢視"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "b647ac081cefce75",
+    "type": "split",
+    "children": [
+      {
+        "id": "426964b09974418b",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "5c2c4e4edbb02330",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "檔案瀏覽器"
+            }
+          },
+          {
+            "id": "467b0362398b725f",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "搜尋"
+            }
+          },
+          {
+            "id": "c4de38f32b5785e2",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "書籤"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 259.5
+  },
+  "right": {
+    "id": "212db1e955330572",
+    "type": "split",
+    "children": [
+      {
+        "id": "a94798eeea562f4f",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "cbbc34510bad4257",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "反向連結"
+            }
+          },
+          {
+            "id": "1a047298a70d5e4b",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "對外連結"
+            }
+          },
+          {
+            "id": "c027137e9d4f4b75",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "標籤"
+            }
+          },
+          {
+            "id": "6e014f82ed9e3515",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "大綱"
+            }
+          },
+          {
+            "id": "24f2bb6d8ccb0e1a",
+            "type": "leaf",
+            "state": {
+              "type": "git-view",
+              "state": {},
+              "icon": "git-pull-request",
+              "title": "Source Control"
+            }
+          }
+        ],
+        "currentTab": 4
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "bases:建立新的 base": false,
+      "switcher:開啟快速切換": false,
+      "graph:查看關聯圖": false,
+      "canvas:建立新畫布": false,
+      "daily-notes:開啟今天的每日筆記": false,
+      "templates:插入模板": false,
+      "command-palette:開啟命令面板": false,
+      "obsidian-git:Open Git source control": false
+    }
+  },
+  "active": "4d737ebf749b8871",
+  "lastOpenFiles": [
+    "113-1 DIP/hw 2",
+    "Research/Pasted image 20250427105340.png",
+    "Research/Automatic_corneal_nerve_fiber_segmentation_and_geometric_biomarker_quantification 2.md",
+    "LLM-Distill-0505-Research/Sky-T1_tech_report 2.md",
+    "LLM-Distill-0505-Research/Pasted image 20250504170606.png",
+    "113-2 SMA/20250422-Note 2.md",
+    "LLM-Distill-0505-Research/Pasted image 20250504110846.png",
+    "LLM-Distill-0505-Research/Pasted image 20250504083729.png",
+    "LLM-Distill-0505-Research/Pasted image 20250504082613.png",
+    "Others/Pasted image 20250528173730.png",
+    "LLM-Distill-0505-Research/Pasted image 20250504170535.png",
+    "113-2典範企業思維/20250418-Note 2.md",
+    "Research/Intraepidermal_Nerve_Fiber_Analysisin_Human Patients_and_AnimalModels_of_Peripheral Neuropathy_A_Comparative_Review 2.md",
+    "Research/Pasted image 20250427100208.png",
+    "Research/Comparison_of_a_simple_methodfor_quantitation_of_intraepidermal_nervefibres_with_a_standard image_analysismethod_using_hypothenar_skin 2.md",
+    "Others/Pasted image 20250528174154.png",
+    "113-2典範企業思維/20250421-Note 2.md",
+    "Others/Pasted image 20250528174137.png",
+    "113-2典範企業思維/職涯規劃 2.md",
+    "LLM-Distill-0505-Research/Distill news report 2.md",
+    "113-2 SMA/Neural_Bellman-Ford_Networks_A General GraphNeural_Network_Framework_for_Link_Prediction 2.md",
+    "113-2 DIA/ESOD_Efficient_Small_Object_Detection_on_High-Resolution_Images 2.md",
+    "Research/Social-Network 2",
+    "Research/20250502-Note 2.md",
+    "113-2 SMA/Final report 2.md",
+    "113-2典範企業思維/Midterm-report 2.md",
+    "113-2典範企業思維/20250411-Note 2.md",
+    "113-1 DIP/期末大抄 2.md",
+    "Others/HW1 Report 2.md",
+    "CSF/20250305-類神經網路模擬學習平台 2.md",
+    "CSF/20240806-CJ會議 2.md",
+    "113-1 DIP/傅立葉轉換 2.md",
+    "113-1 DIP/脈衝函數 2.md",
+    "Others/Fintech final 2.md",
+    "113-1 DIP/Ch2 Digital Image Fundamentals 2.md",
+    "Others/qweqwqweq 2.md",
+    "CSF/20240910 平台缺失項目 2.md",
+    "工程美學",
+    "半導體",
+    "Research/Social-Network",
+    "Research",
+    "Others",
+    "LLM-Distill-0505-Research",
+    "CSF",
+    "Books",
+    "113-2典範企業思維"
+  ]
+}
