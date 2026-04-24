@@ -1,14 +1,14 @@
 ### Erosion
 
 a. 
-![](./eroded_d_1.png)
-![](./eroded_d_3.png)
-![](./eroded_d_8.png)
+![](eroded_d_1.png)
+![](eroded_d_3.png)
+![](eroded_d_8.png)
 
 b.
-![](./eroded_s_2.png)
-![](./eroded_s_5.png)
-![](./eroded_s_14.png)
+![](eroded_s_2.png)
+![](eroded_s_5.png)
+![](eroded_s_14.png)
 
 
 ### Opening and Closing
