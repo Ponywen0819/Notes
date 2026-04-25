@@ -1,3 +1,5 @@
+#note
+
 # 介紹
 ---
 貝式推測理論 ( Bayesian Decision Theory) 是一種使用機率與成本決定最佳決策的理論，它包含以下不同部分：

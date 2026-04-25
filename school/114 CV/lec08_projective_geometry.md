@@ -1,3 +1,5 @@
+#note
+
 # Lecture 08 — Projective Geometry（射影幾何）
 
 > 課程：NTU EE 114 Computer Vision｜講者：簡韶逸 教授

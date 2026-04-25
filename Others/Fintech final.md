@@ -1,3 +1,5 @@
+#report
+
 ### Random variables
 ###### 1. Given a fair dice with its face value when the dice is tossed as a discrete random variable X
 a. $E(X)$

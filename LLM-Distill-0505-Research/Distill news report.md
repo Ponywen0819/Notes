@@ -1,4 +1,4 @@
-
+#report
 # Background
 Knowledge Distillation (KD) emerged as a practical solution to the ever-growing size and computational demands of deep neural networks. By transferring “dark knowledge” from a large, high-capacity **Teacher** model to a smaller **Student**model, KD enables deployment of lightweight yet performant models in resource-constrained environments.
 
@@ -11,8 +11,9 @@ Knowledge Distillation (KD) emerged as a practical solution to the ever-growing 
 	尺寸大，在目標任務可以達到最佳效能的模型
 - 學生模型
 	尺寸小、結構簡單，透過模仿教師模型提升效能
+	
 ## 如何進行學習
-LLM 模型，可以看作從一個機率空間經過複雜的運算後轉換到另一個機率空間，而不同的模型所輸出的機率空間也不盡相同，為了確認不同模型機率空間的差別，會使用 KL 散度 ( KL Divergence ) 量化空間的距離，而這個距離就可以用來訓練學生模型。
+LLM 模型，可以看作從一個機率空間經過複雜的運算後轉換到另一個機率空間，而不同的模型所輸出的機率空間也不盡相同，為了確認不同模型機率空間的差別，會使用 KL 散度 (KL Divergence) 量化空間的距離，而這個距離就可以用來訓練學生模型。
 
 # What’s Knowledge Distillation
 ## Teacher–Student Architecture

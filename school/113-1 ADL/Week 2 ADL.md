@@ -1,3 +1,5 @@
+#note
+
 # Sequence Modeling
 ## Meaning Representations in Computers
  兩種方法

@@ -1,3 +1,5 @@
+#paper
+
 # Method
 ## Revisiting Object Detector
 作者針對傳統物件偵測流程進行數學建模與模組化分析。給定一張高為 $H$、寬為 $W$ 的彩色影像，其可表示為：
