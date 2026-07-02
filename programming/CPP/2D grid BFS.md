@@ -66,8 +66,8 @@ for (每個起點 (r,c)) { dist[r][c] = 0; q.push({r,c}); }
 // 之後迴圈完全一樣
 ```
 
-## 0-1 BFS(邊權只有 0 或 1)→ 用 deque
-權重 0 的鄰居 `push_front`、權重 1 的 `push_back`,維持隊列單調 → $O(V+E)$ 求最短路,不必動用 Dijkstra 的 heap。你之前看的 `findSafeWalk` 就是這招。
+## [[0-1 BFS]](邊權只有 0 或 1)→ 用 deque
+權重 0 的鄰居 `push_front`、權重 1 的 `push_back`,維持隊列單調 → $O(V+E)$ 求最短路,不必動用 Dijkstra 的 heap。你之前看的 `findSafeWalk` 就是這招。詳見 [[0-1 BFS]]。
 ```cpp
 deque<pair<int,int>> q;
 // cost 0: q.emplace_front(nr, nc);   cost 1: q.emplace_back(nr, nc);
