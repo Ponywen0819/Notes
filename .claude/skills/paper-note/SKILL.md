@@ -66,7 +66,7 @@ If a non-arXiv PDF turns out to also be on arXiv (search the title), prefer rout
 
 ## Step 2 — Write the note
 
-**Path**: `Research/<Short Title>.md`, or the topic subfolder the user names (e.g. `Research/Agent framework/`, `Research/Social-Network/`). Read one existing note first if unsure (`Research/Agent Laboratory.md` is the reference for depth).
+**Path**: `Research/<Short Title>.md`, or the topic subfolder the user names (e.g. `Research/Agents/`, `Research/LLM/`, `Research/Graph/`, `Research/Computer Vision/`, `Research/Medical Imaging/`). Read one existing note first if unsure (`Research/Agents/Agent Laboratory.md` is the reference for depth).
 
 **Language**: Traditional Chinese (繁中), technical terms kept in English inline.
 
