@@ -2,7 +2,7 @@
 
 # Server 排程:一次 API call 怎麼變成好幾次 llama_decode()
 
-> 對應原始碼(commit `17252c7`,2026-08-29):`tools/server/server-context.cpp`。[[處理流程]] 與 [[llm_graph 計算圖]] 談的是「一次 `llama_decode()` 內部」發生的事;這篇談的是**上一層**——server 怎麼決定什麼時候、用誰的 token 去組出下一次 `llama_decode()` 呼叫。更外層「HTTP request 從 JSON 進來、任務怎麼被接進 slot、到回應文字送出」的完整旅程見 [[API 請求生命週期]]。
+> 對應原始碼(commit `17252c7`,2026-08-29):`tools/server/server-context.cpp`。[[處理流程]] 與 [[llm_graph 計算圖]] 談的是「一次 `llama_decode()` 內部」發生的事;這篇談的是**上一層**——server 怎麼決定什麼時候、用誰的 token 去組出下一次 `llama_decode()` 呼叫。更外層「HTTP request 從 JSON 進來、任務怎麼被接進 slot、到回應文字送出」的完整旅程見 [[API 請求生命週期]];再更早一步、server 啟動時「模型怎麼從 `.gguf` 檔案載入」見 [[模型載入]]。
 
 ---
 

@@ -4,7 +4,7 @@
 
 > 對應原始碼(commit `17252c7`,2026-08-29):`tools/server/server.cpp`、`server-http.cpp`、`server-common.cpp`、`server-schema.cpp`、`server-chat.cpp`、`server-queue.cpp`、`server-context.cpp`、`server-stream.cpp`,以及 `common/sampling.cpp`。
 >
-> 這篇是最外層——一個 HTTP request 從進來到回應文字送出的完整旅程。中間「一個 tick 怎麼組 batch、`n_batch` 怎麼切」見 [[Server 排程與 batch 組裝]];「一次 `llama_decode()` 內部怎麼切 ubatch、怎麼用 KV cache」見 [[處理流程]];「compute graph 怎麼建、怎麼算」見 [[llm_graph 計算圖]]。這篇不重複那三篇的細節,只在對應的步驟上連過去。
+> 這篇是最外層——一個 HTTP request 從進來到回應文字送出的完整旅程。中間「一個 tick 怎麼組 batch、`n_batch` 怎麼切」見 [[Server 排程與 batch 組裝]];「一次 `llama_decode()` 內部怎麼切 ubatch、怎麼用 KV cache」見 [[處理流程]];「compute graph 怎麼建、怎麼算」見 [[llm_graph 計算圖]]。這篇不重複那三篇的細節,只在對應的步驟上連過去。再更早一步、server 啟動時「模型怎麼從 `.gguf` 檔案載入成 `llama_model`」見 [[模型載入]]——那是整個系列筆記的起點。
 
 ---
 
@@ -56,7 +56,7 @@ flowchart TD
 
 **2. Tokenize**
 
-`tokenize_input_prompts()`(`server-common.cpp:998`)把 prompt(可能是字串、已經是 token id、或混合)轉成 `server_tokens`(內部 token 序列 + 多模態 chunk 資訊的包裝型別)。這一步在 HTTP 執行緒上做,所以多個並行 request 的 tokenize 不會互相卡。
+`tokenize_input_prompts()`(`server-common.cpp:998`)把 prompt(可能是字串、已經是 token id、或混合)轉成 `server_tokens`(內部 token 序列 + 多模態 chunk 資訊的包裝型別)。這一步在 HTTP 執行緒上做,所以多個並行 request 的 tokenize 不會互相卡——tokenize 本身(BPE pre-tokenization、合併演算法、special token 保護)見 [[BPE 分詞策略]]。
 
 **3. Sampling / 生成參數解析**
 
@@ -93,21 +93,12 @@ flowchart TD
 
 ## 四、Queue 執行緒:任務什麼時候真正被接進 slot
 
-`server_queue::start_loop()`(`server-queue.cpp:278`)的主迴圈,每一輪依序做兩件事:
-
-```cpp
-while (true) {
-    if (process_new_tasks(false)) break;   // 1. 先把佇列裡「現在有的」任務全部處理掉
-    callback_update_slots();               // 2. 才跑一次 update_slots() tick
-}
-```
+`server_queue::start_loop()` 主迴圈裡,每一輪先跑 `process_new_tasks(false)`、才跑一次 `update_slots()` tick——完整的迴圈結構、程式碼位置,以及「`pre_decode()` 本身不查詢佇列」的細節,見 [[Server 排程與 batch 組裝]] 第三節,這裡不重複。
 
 **`process_new_tasks(false)`**(`server-queue.cpp:138`)把 `queue_tasks` 佇列**清空**——對每個任務呼叫 `callback_new_task` → `process_single_task()`(`server-context.cpp:2348`):
 - `get_available_slot(task)` 配一個 slot(見第五節)。
 - 配到就 `launch_slot_with_task()`(見第六節)開始處理這個 task 的 prompt。
 - 沒空 slot、或指定的 slot 正忙,就 `queue_tasks.defer()`——放回去,下一輪 `process_new_tasks` 再試。
-
-> 這一步跟 [[Server 排程與 batch 組裝]] 裡「`pre_decode()` 是唯一檢查佇列的地方」的說法對不上——那是舊版程式碼結構的理解,這個 commit 的實際佇列排空與 slot 分配(`process_new_tasks` → `process_single_task`)發生在 `update_slots()`**之前**、由 `server_queue::start_loop()` 直接呼叫,`update_slots()` 內的 `pre_decode()` 這個 tick 本身**不查詢佇列**,只處理已經在 slot 裡的 context-shift 和組 batch。真正決定「新請求能不能搭上這一輪」的,是 queue 主迴圈的這一次 `process_new_tasks` 落在哪個時間點——概念上等價(還是「以迴圈為單位」),但物理位置在 `update_slots()` 外面一層。
 
 **只有處理到 prompt/生成的每個 token 之間**,`queue_tasks.yield_to_queue()`(server-queue.cpp:222)才會允許 queue 執行緒「臨時」再處理一批新任務(不阻塞太久)——例如 speculative decoding 讓草稿模型算草稿時就是這樣借用時間。
 
@@ -123,9 +114,9 @@ while (true) {
 
 選定後,如果這個 slot 原本裝的 prompt 跟新 task 的重疊很少(`f_keep < 0.5`),且 server 開了 RAM-backed 的 `prompt_cache`,會先把 slot 目前的 KV 狀態存進 `prompt_cache`(`prompt_save`),再嘗試把新 task 匹配得到的舊狀態換進來(`prompt_load`)——**這是 KV cache 內容在 GPU 顯存和主機 RAM 之間的換入換出**,跟 slot 本身的指派是兩件事。
 
-**KV cache 重用其實有三層,成本/彈性依序遞減**
+**KV cache 重用其實有三層(跨 API call),成本/彈性依序遞減**
 
-「用不同 prompt 就把 KV cache 洗掉」不是必然——如果同一組 prompt 會反覆出現,系統(或使用者自己的部署設定)有三種漸進的方式避免重算,本質上都是同一個念頭「算過的 KV 別浪費」的不同成本權衡:
+單次 decode() 內部「KV cache 怎麼讀寫」的機制見 [[處理流程]] 第五節;這裡談的是**跨 request** 的重用策略。「用不同 prompt 就把 KV cache 洗掉」不是必然——如果同一組 prompt 會反覆出現,系統(或使用者自己的部署設定)有三種漸進的方式避免重算,本質上都是同一個念頭「算過的 KV 別浪費」的不同成本權衡:
 
 | 層級 | 機制 | 能存幾組 | 代價 |
 |---|---|---|---|
@@ -182,7 +173,7 @@ Decode 拿到這個位置的 logits 後,`common_sampler_sample()`(`common/sampli
 
 `server-context.cpp:1822`。拿到採樣出的 token、`detokenize` 成文字片段後,不是直接送出去,而是:
 
-1. **不完整 UTF-8 緩衝**:`validate_utf8()` 檢查 `generated_text` 尾端是不是卡在一個多 byte 字元中間(單一 token 不保證對齊 codepoint 邊界)——沒組完的字元先不送,等下一個 token 補完再一起送。
+1. **不完整 UTF-8 緩衝**:`validate_utf8()` 檢查 `generated_text` 尾端是不是卡在一個多 byte 字元中間(單一 token 不保證對齊 codepoint 邊界——為什麼會這樣,見 [[BPE 分詞策略]] 第八節)——沒組完的字元先不送,等下一個 token 補完再一起送。
 2. **Stop 字串緩衝(partial match)**:`find_stopping_strings()`(`server-context.cpp:567`)拿目前累積文字的尾巴去比對每個 `antiprompt`(stop 字串):
    - **完全匹配**:立刻截斷,結束生成(`STOP_TYPE_WORD`)。
    - **部分匹配**(目前尾巴恰好是某個 stop 字串的前綴,但還沒收滿):**不送這段文字**,等下一個 token 進來看是否真的湊成完整 stop 字串,還是可以放行——這就是為什麼 stream 模式下,文字有時會感覺「卡一拍」才吐出來:server 在賭「這會不會是 stop 詞的開頭」。

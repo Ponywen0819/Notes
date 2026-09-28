@@ -2,7 +2,7 @@
 
 # llm_graph:計算圖是怎麼建出來、算出來的
 
-> 對應原始碼(commit `17252c7`,2026-08-29):`src/llama-graph.h/.cpp`、`src/llama-model.cpp`、`src/models/llama.cpp`(以 Llama 架構為例)。承接 [[處理流程]] 中 `process_ubatch()` 呼叫 `model.build_graph()` 之後的部分;更上一層「誰的 token 什麼時候被排進這次要建的圖」見 [[Server 排程與 batch 組裝]];最外層「一個 HTTP request 從 JSON 進來到回應文字送出」的完整旅程見 [[API 請求生命週期]]。
+> 對應原始碼(commit `17252c7`,2026-08-29):`src/llama-graph.h/.cpp`、`src/llama-model.cpp`、`src/models/llama.cpp`(以 Llama 架構為例)。承接 [[處理流程]] 中 `process_ubatch()` 呼叫 `model.build_graph()` 之後的部分;更上一層「誰的 token 什麼時候被排進這次要建的圖」見 [[Server 排程與 batch 組裝]];最外層「一個 HTTP request 從 JSON 進來到回應文字送出」的完整旅程見 [[API 請求生命週期]]。權重 tensor 怎麼從 `.gguf` 檔案載入、依 `-ngl` 分配到哪個裝置,是更早一步的 [[模型載入]]。
 
 ---
 
@@ -115,7 +115,7 @@ ffn_norm(RMSNorm)
 
 **layer 該放 GPU 還是 CPU,模型載入時就決定了,跟 forward/ubatch 無關**
 
-`-ngl`(`n_gpu_layers`)在模型載入階段就把每一層分配到某個裝置:從最後一層往前數 `n_gpu_layers` 層放 GPU(`i_gpu_start = n_layer_all + 1 - n_gpu_layers`,`llama-model.cpp:1467`),寫進 `dev_layer[il]`(`llama-model.cpp:1168/1486`);每層的權重張量,載入時就配置在對應裝置的 buffer 上。`build_graph()` 建圖時完全不管這件事,只是照常把每層的 op 接上該層的權重張量——這些權重張量本來就已經在某個裝置的記憶體上了。
+`-ngl`(`n_gpu_layers`)在模型載入階段就把每一層分配到某個裝置:從最後一層往前數 `n_gpu_layers` 層放 GPU(`i_gpu_start = n_layer_all + 1 - n_gpu_layers`,`llama-model.cpp:1467`),寫進 `dev_layer[il]`(`llama-model.cpp:1168/1486`);每層的權重張量,載入時就配置在對應裝置的 buffer 上。這個分配怎麼算出來、`--split-mode`/`--tensor-split`/`-ot` 怎麼介入,細節見 [[模型載入]] 第八節。`build_graph()` 建圖時完全不管這件事,只是照常把每層的 op 接上該層的權重張量——這些權重張量本來就已經在某個裝置的記憶體上了。
 
 真正做「切裝置」這件事的,是 `graph_compute()` 前 `ggml_backend_sched_split_graph()`(`ggml-backend.cpp:1057`)每次執行前對整張圖的掃描:
 

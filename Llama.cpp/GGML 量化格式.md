@@ -24,11 +24,11 @@ importance-quant  2 bit  codebook 大小分級(XXS < XS < S < M)
 
 三個世代,設計邏輯完全不同,合起來才是「GGML 量化」:
 
-| 世代 | 例子 | 核心想法 |
-|---|---|---|
-| **Legacy**(舊式) | `Q4_0` `Q4_1` `Q5_0` `Q5_1` `Q8_0` `Q8_1` | 每 32 個權重一組(block),組內線性量化,一組一個 scale |
-| **K-quants**(2023 中,ikawrakow 提出) | `Q2_K` ~ `Q8_K`,以及 `Q3_K_S/M/L` 等混合版 | 256 個權重一組(superblock),組內再切小 block,兩層 scale,並且**同一個 tensor 內不同層/不同位置可以用不同精度** |
-| **IQ-quants**(importance quant) | `IQ1_S` `IQ2_XXS` `IQ3_XXS` `IQ4_NL` … | 不是線性量化,而是**查表(codebook)**——量化值取一組事先算好的、對常見權重分布最省 bit 的向量,通常要配合 `imatrix`(importance matrix)校正 |
+| 世代                                | 例子                                        | 核心想法                                                                                          |
+| --------------------------------- | ----------------------------------------- | --------------------------------------------------------------------------------------------- |
+| **Legacy**(舊式)                    | `Q4_0` `Q4_1` `Q5_0` `Q5_1` `Q8_0` `Q8_1` | 每 32 個權重一組(block),組內線性量化,一組一個 scale                                                           |
+| **K-quants**(2023 中,ikawrakow 提出) | `Q2_K` ~ `Q8_K`,以及 `Q3_K_S/M/L` 等混合版      | 256 個權重一組(superblock),組內再切小 block,兩層 scale,並且**同一個 tensor 內不同層/不同位置可以用不同精度**                  |
+| **IQ-quants**(importance quant)   | `IQ1_S` `IQ2_XXS` `IQ3_XXS` `IQ4_NL` …    | 不是線性量化,而是**查表(codebook)**——量化值取一組事先算好的、對常見權重分布最省 bit 的向量,通常要配合 `imatrix`(importance matrix)校正 |
 
 ---
 
